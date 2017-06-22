@@ -1,0 +1,21 @@
+{
+  "name": "window-configurator",
+  "version": "0.0.1",
+  "description": "canvas windw project configurator",
+  "keywords": "cofingurator window",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tommaso Vannoni (t.vannoni@gmail.com)",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "~1.0.0",
+    "cookie-parser": "~1.0.1",
+    "debug": "~0.7.4",
+    "express": "^4.15.3",
+    "morgan": "~1.0.0",
+    "pug": "^2.0.0-rc.2",
+    "static-favicon": "~1.0.0"
+  }
+}
