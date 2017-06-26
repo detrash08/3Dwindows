@@ -1,5 +1,8 @@
-.app {
-  width: 600px;
-  height: 800px;
+body {
+  margin: 0;
+}
+canvas {
+  width: 95%;
+  height: 95%;
   background-color: #8a001a;
 }
