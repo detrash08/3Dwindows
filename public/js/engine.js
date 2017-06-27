@@ -28,9 +28,11 @@ function init() {
     scene.add(camera);
 
     camera.position.z = 10;
+    camera.target = THREE.Vector3(0, 0, 0);
 
-    renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer({alpha: true, antialias: true});
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0xffffff, 0);
     document.body.appendChild(renderer.domElement);
 }
 
@@ -45,16 +47,26 @@ function animate() {
 window.addEventListener("keydown", function (e) {
     switch (e.key) {
         case 'ArrowLeft':
-            horizontalBlock.rotation.x -= 0.1;
+            camera.target = THREE.Vector3(0, 0, 0);
+            cameraPosAngle = 180;
+            // need to position camera as point on sphere of radius "r"
+            //on keydown event use following system to calculate next coordinates:
+            //x' = r*sin(θ)*cos(φ)
+            //y' = r*sin(θ)*sin(φ)
+            //z' = r*cos(θ)
+            //https://en.wikipedia.org/wiki/Spherical_coordinate_system
+            //circle positioning x=cos(angle)*radius; y=sin(angle)*radius
+            //deg to rad degValue*Math.PI/180 //use this to calculate angle in radians
             break;
         case 'ArrowRight':
-            horizontalBlock.rotation.x += 0.1;
+            camera.position.x += 0.1;
+            camera.position.z -= 0.1;
             break;
         case 'ArrowUp':
-            horizontalBlock.rotation.y += 0.1;
+            camera.position.y += 0.1;
             break;
         case 'ArrowDown':
-            horizontalBlock.rotation.y -= 0.1;
+            camera.position.y -= 0.1;
             break;
         case 'Enter':
             camera.position.x = 0;
@@ -64,11 +76,15 @@ window.addEventListener("keydown", function (e) {
             camera.rotation.y = 0;
             camera.rotation.z = 0;
             camera.rotation.z = 0;
-            horizontalBlock.rotation.x = 0;
-            horizontalBlock.rotation.y = 0;
+            camera.rotation.x = 0;
+            camera.rotation.y = 0;
             break;
     }
 
     console.log("position", camera.position.x, camera.position.y, camera.position.z);
     console.log("rotation", camera.rotation.x, camera.rotation.y, camera.rotation.z);
 });
+
+function calcCameraPosition(x, y, z) {
+
+}
