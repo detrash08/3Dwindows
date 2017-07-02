@@ -6,7 +6,7 @@ animate();
 function init() {
     scene = new THREE.Scene();
 
-    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 0, 10);
 
     //INIT CAMERA
@@ -35,7 +35,7 @@ function init() {
     scene.add(camera);
 
     renderer = new THREE.WebGLRenderer({alpha: true, antialias: true});
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.setClearColor(0xffffff, 0);
     document.body.appendChild(renderer.domElement);
 }
@@ -51,7 +51,7 @@ function animate() {
 window.addEventListener("keydown", function (e) {
     switch (e.key) {
         case 'ArrowLeft':
-            phiAngle = (phiAngle - 45) % 360;
+            phiAngle = (phiAngle - 1) % 360;
             // need to position camera as point on sphere of radius "r"
             //on keydown event use following system to calculate next coordinates:
             //x' = r*sin(θ)*cos(φ)
@@ -63,15 +63,15 @@ window.addEventListener("keydown", function (e) {
             moveCamera();
             break;
         case 'ArrowRight':
-            phiAngle = (phiAngle + 45) % 360;
+            phiAngle = (phiAngle + 1) % 360;
             moveCamera();
             break;
         case 'ArrowUp':
-            thetaAngle = (thetaAngle + 45) % 360;
+            thetaAngle = (thetaAngle + 1) % 360;
             moveCamera();
             break;
         case 'ArrowDown':
-            thetaAngle = (thetaAngle - 45) % 360;
+            thetaAngle = (thetaAngle - 1) % 360;
             moveCamera();
             break;
         case 'Enter':
@@ -93,7 +93,7 @@ function initCamera() {
 }
 
 function moveCamera() {
-    var degToRad = Math.PI / 360;
+    var degToRad = Math.PI / 180;
     var x = cameraZoom * Math.sin(thetaAngle * degToRad) * Math.cos(phiAngle * degToRad);
     var y = cameraZoom * Math.sin(thetaAngle * degToRad) * Math.sin(phiAngle * degToRad);
     var z = cameraZoom * Math.cos(thetaAngle * degToRad);
