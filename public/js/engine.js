@@ -1,5 +1,5 @@
 var scene, camera, renderer, horizontalBlock;
-var cameraZoom, thetaAngle, phiAngle;
+var cameraZoom, lat, lng, thetaAngle, phiAngle;
 init();
 animate();
 
@@ -35,7 +35,7 @@ function init() {
     scene.add(camera);
 
     renderer = new THREE.WebGLRenderer({alpha: true, antialias: true});
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0xffffff, 0);
     document.body.appendChild(renderer.domElement);
 }
@@ -51,7 +51,8 @@ function animate() {
 window.addEventListener("keydown", function (e) {
     switch (e.key) {
         case 'ArrowLeft':
-            phiAngle = (phiAngle - 1) % 360;
+            lng = to02PI(lng - 1);
+
             // need to position camera as point on sphere of radius "r"
             //on keydown event use following system to calculate next coordinates:
             //x' = r*sin(θ)*cos(φ)
@@ -63,15 +64,15 @@ window.addEventListener("keydown", function (e) {
             moveCamera();
             break;
         case 'ArrowRight':
-            phiAngle = (phiAngle + 1) % 360;
+            lng = to02PI(lng + 1);
             moveCamera();
             break;
         case 'ArrowUp':
-            thetaAngle = (thetaAngle + 1) % 360;
+            lat = to0PI(lat + 1);
             moveCamera();
             break;
         case 'ArrowDown':
-            thetaAngle = (thetaAngle - 1) % 360;
+            lat = to0PI(lat - 1);
             moveCamera();
             break;
         case 'Enter':
@@ -85,6 +86,8 @@ window.addEventListener("keydown", function (e) {
 
 function initCamera() {
     cameraZoom = 10;
+    lng = 0;
+    lat = 90;
     thetaAngle = 0;
     phiAngle = 0;
     camera.position.x = 0;
@@ -94,13 +97,17 @@ function initCamera() {
 
 function moveCamera() {
     var degToRad = Math.PI / 180;
-    var x = cameraZoom * Math.sin(thetaAngle * degToRad) * Math.cos(phiAngle * degToRad);
-    var y = cameraZoom * Math.sin(thetaAngle * degToRad) * Math.sin(phiAngle * degToRad);
-    var z = cameraZoom * Math.cos(thetaAngle * degToRad);
+
+    phiAngle = lng * degToRad;
+    thetaAngle = Math.PI / 2 - lat * degToRad;
+
+    var x = cameraZoom * Math.sin(thetaAngle) * Math.cos(phiAngle);
+    var y = cameraZoom * Math.sin(thetaAngle) * Math.sin(phiAngle);
+    var z = cameraZoom * Math.cos(thetaAngle);
     camera.position.set(x, y, z);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-    console.log(camera.position.x, camera.position.y, camera.position.z, "zoom", cameraZoom, "theta(y)", thetaAngle, "phi(x)", phiAngle);
+    console.log(camera.position.x, camera.position.y, camera.position.z, "lat", lat, "lng", lng, "zoom", cameraZoom, "theta(y)", thetaAngle, "phi(x)", phiAngle);
 
     var tmaterial = new THREE.PointsMaterial({
         color: 0xff0000,
@@ -112,4 +119,11 @@ function moveCamera() {
     tgeometry.vertices.push(new THREE.Vector3(x, y, z));
     var point = new THREE.Points(tgeometry, tmaterial);
     scene.add(point);
+}
+
+function to0PI(angle) {
+    return angle + Math.ceil((-angle)/ 181) * 181
+}
+function to02PI(angle) {
+    return angle + Math.ceil(-angle / 360) * 360
 }
