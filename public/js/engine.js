@@ -27,7 +27,7 @@ function init() {
     //     //top-left-front, top-left-rear
     //     new THREE.Vector3(5, -4.5, -1), new THREE.Vector3(5, -4.5, 1)
     // );
-    var geometry = new THREE.BoxGeometry(5, 0.5, 0.1);
+    var geometry = new THREE.BoxGeometry(0.1, 0.5, 5);
 
     horizontalBlock = new THREE.Mesh(geometry, material);
 
@@ -77,7 +77,7 @@ window.addEventListener("keydown", function (e) {
 
 function initCamera() {
     cameraZoom = 10;
-    phiAngle = 0;
+    phiAngle = 90;
     thetaAngle = 0;
 }
 
@@ -87,9 +87,17 @@ function moveCamera() {
     var phiRad = phiAngle * degToRad;
     var thetaRad =  thetaAngle * degToRad;
 
-    var x = cameraZoom * Math.sin(thetaRad) * Math.cos(phiRad);
-    var y = cameraZoom * Math.sin(thetaRad) * Math.sin(phiRad);
-    var z = cameraZoom * Math.cos(thetaRad);
+    //phi is latitude, theta is longitude
+    // var x = cameraZoom * Math.cos(phiRad) * Math.cos(thetaRad);
+    // var y = cameraZoom * Math.cos(phiRad) * Math.sin(thetaRad);
+    // var z = cameraZoom * Math.sin(phiRad);
+
+    //phi is colatitude, theta is longitude
+    var x = cameraZoom * Math.sin(phiRad) * Math.cos(thetaRad);
+    var z = cameraZoom * Math.sin(phiRad) * Math.sin(thetaRad);
+    var y = cameraZoom * Math.cos(phiRad);
+
+
 
     camera.position.set(x, y, z);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
