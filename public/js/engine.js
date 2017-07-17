@@ -1,5 +1,6 @@
 var scene, camera, renderer, horizontalBlock;
-var cameraZoom, thetaAngle, phiAngle;
+var radius, theta, phi;
+
 init();
 animate();
 
@@ -47,74 +48,7 @@ function animate() {
 }
 
 
-//Mouse actions
-window.addEventListener("keydown", function (e) {
-    switch (e.key) {
-        case 'ArrowLeft':
-            thetaAngle = angleToRange(thetaAngle - 1);
-            moveCamera();
-            break;
-        case 'ArrowRight':
-            thetaAngle = angleToRange(thetaAngle + 1);
-            moveCamera();
-            break;
-        case 'ArrowUp':
-            phiAngle = angleToRange(phiAngle + 1);
-            moveCamera();
-            break;
-        case 'ArrowDown':
-            phiAngle = angleToRange(phiAngle - 1);
-            moveCamera();
-            break;
-        case 'Enter':
-            initCamera();
-            break;
-    }
-
-    console.log("position", camera.position.x, camera.position.y, camera.position.z);
-    console.log("rotation", camera.rotation.x, camera.rotation.y, camera.rotation.z);
-});
-
-function initCamera() {
-    cameraZoom = 10;
-    phiAngle = 90;
-    thetaAngle = 0;
-}
-
-function moveCamera() {
-    var degToRad = Math.PI / 180;
-
-    var phiRad = phiAngle * degToRad;
-    var thetaRad =  thetaAngle * degToRad;
-
-    //phi is latitude, theta is longitude
-    // var x = cameraZoom * Math.cos(phiRad) * Math.cos(thetaRad);
-    // var y = cameraZoom * Math.cos(phiRad) * Math.sin(thetaRad);
-    // var z = cameraZoom * Math.sin(phiRad);
-
-    //phi is colatitude, theta is longitude
-    var x = cameraZoom * Math.sin(phiRad) * Math.cos(thetaRad);
-    var z = cameraZoom * Math.sin(phiRad) * Math.sin(thetaRad);
-    var y = cameraZoom * Math.cos(phiRad);
-
-
-
-    camera.position.set(x, y, z);
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
-
-    console.log(camera.position.x, camera.position.y, camera.position.z, "zoom", cameraZoom, "theta(y)", thetaAngle, "phi(x)", phiAngle);
-
-    var tmaterial = new THREE.PointsMaterial({
-        color: 0xff0000,
-        size: 0.1,
-        opacity: 0.5
-    });
-
-    var tgeometry = new THREE.Geometry();
-    tgeometry.vertices.push(new THREE.Vector3(x, y, z));
-    var point = new THREE.Points(tgeometry, tmaterial);
-    scene.add(point);
-}
+//CAMERA actions
 
 function angleToRange(angle) {
     return (360 + (angle) % 360) % 360;
